@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estrutura de Ciclos — Descompliquei Marketing</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #E8620A;
+    --orange-light: rgba(232,98,10,0.15);
+    --orange-border: rgba(232,98,10,0.25);
+    --dark: #0E0E0E;
+    --dark2: #161616;
+    --dark3: #1E1E1E;
+    --dark4: #262626;
+    --border: rgba(255,255,255,0.07);
+    --border-md: rgba(255,255,255,0.11);
+    --text: #F0EDE8;
+    --text-muted: #8A8680;
+    --text-dim: #444240;
+    --green: #22C55E;
+    --green-bg: rgba(34,197,94,0.08);
+    --green-border: rgba(34,197,94,0.2);
+    --yellow: #EAB308;
+    --yellow-bg: rgba(234,179,8,0.08);
+    --yellow-border: rgba(234,179,8,0.2);
+    --red: #EF4444;
+    --red-bg: rgba(239,68,68,0.08);
+    --red-border: rgba(239,68,68,0.2);
+    --blue: #3B82F6;
+    --blue-bg: rgba(59,130,246,0.08);
+    --blue-border: rgba(59,130,246,0.2);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 220px;
+    background: var(--dark2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    overflow-y: auto;
+  }
+
+  .sidebar-brand {
+    padding: 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .brand-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.08em;
+    color: var(--orange);
+  }
+
+  .brand-sub {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .nav-group { padding: 16px 12px 4px; }
+
+  .nav-group-label {
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 0 8px;
+    margin-bottom: 4px;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 8px;
+    border-radius: 6px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 12px;
+    transition: all 0.15s;
+  }
+
+  .nav-link:hover, .nav-link.active {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+
+  .nav-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.5;
+    flex-shrink: 0;
+  }
+
+  /* MAIN */
+  .main { margin-left: 220px; }
+
+  /* HERO */
+  .hero {
+    padding: 52px 56px 40px;
+    border-bottom: 1px solid var(--border);
+    background: var(--dark2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    right: -100px; top: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(232,98,10,0.06) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--orange);
+    font-weight: 600;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 20px; height: 1px;
+    background: var(--orange);
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+
+  .hero h1 span { color: var(--orange); }
+
+  .hero-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    max-width: 520px;
+    line-height: 1.65;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 0;
+    margin-top: 32px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    width: fit-content;
+  }
+
+  .hero-stat {
+    padding: 14px 24px;
+    border-right: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .hero-stat:last-child { border-right: none; }
+
+  .stat-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 18px;
+    color: var(--orange);
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* CONTENT */
+  .content { padding: 48px 56px; display: flex; flex-direction: column; gap: 56px; }
+
+  /* SECTION */
+  .section { scroll-margin-top: 24px; }
+
+  .sec-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sec-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--orange);
+    letter-spacing: 0.1em;
+  }
+
+  .sec-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 0.06em;
+  }
+
+  /* PIPELINE */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 20px;
+  }
+
+  .pipe-step {
+    flex: 1;
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    padding: 16px 18px;
+    position: relative;
+  }
+
+  .pipe-step:first-child { border-radius: 10px 0 0 10px; }
+  .pipe-step:last-child { border-radius: 0 10px 10px 0; }
+
+  .pipe-step:not(:last-child)::after {
+    content: '›';
+    position: absolute;
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: var(--orange);
+    z-index: 2;
+    font-weight: 300;
+  }
+
+  .pipe-step:not(:first-child) { border-left: none; }
+
+  .pipe-step-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .pipe-step-metric {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--orange);
+    letter-spacing: 0.06em;
+  }
+
+  /* STAGE CARDS */
+  .stages { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+  .stage-card {
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .stage-head {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .stage-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.12em;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+
+  .stage-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.06em;
+    line-height: 1;
+  }
+
+  .stage-body { padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; }
+
+  .stage-row { display: flex; flex-direction: column; gap: 4px; }
+
+  .stage-row-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+
+  .stage-row-val {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .stage-row-val strong { color: var(--text); }
+
+  /* METRICS TABLE */
+  .metrics-wrap {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .metrics-head {
+    display: grid;
+    grid-template-columns: 180px 1fr 1fr 1fr;
+    background: var(--dark3);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .metrics-head-cell {
+    padding: 10px 16px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    font-weight: 600;
+    border-right: 1px solid var(--border);
+  }
+
+  .metrics-head-cell:last-child { border-right: none; }
+
+  .metrics-head-cell.razoavel { color: var(--yellow); }
+  .metrics-head-cell.bom { color: var(--green); }
+  .metrics-head-cell.escalavel { color: #06B6D4; }
+
+  .metrics-row {
+    display: grid;
+    grid-template-columns: 180px 1fr 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .metrics-row:last-child { border-bottom: none; }
+
+  .metrics-cell {
+    padding: 12px 16px;
+    border-right: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  .metrics-cell:last-child { border-right: none; }
+
+  .metrics-cell.metric-name {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .metrics-cell.metric-sub {
+    font-size: 10px;
+    color: var(--text-dim);
+    display: block;
+    font-weight: 400;
+    margin-top: 2px;
+  }
+
+  .metrics-cell.razoavel {
+    background: var(--yellow-bg);
+    color: var(--yellow);
+  }
+
+  .metrics-cell.bom {
+    background: var(--green-bg);
+    color: var(--green);
+  }
+
+  .metrics-cell.escalavel {
+    background: rgba(6,182,212,0.07);
+    color: #06B6D4;
+  }
+
+  .metric-action {
+    font-size: 10px;
+    opacity: 0.7;
+    display: block;
+    margin-top: 2px;
+  }
+
+  /* CRITERIA CARDS */
+  .criteria-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .criteria-card {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .criteria-card-head {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .criteria-card-head .badge {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .criteria-card-head .title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .criteria-card-head .sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 1px;
+  }
+
+  .criteria-card-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }
+
+  .criteria-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .criteria-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  .criteria-item strong { color: var(--text); }
+
+  .criteria-note {
+    margin-top: 8px;
+    padding: 10px 12px;
+    background: var(--dark3);
+    border-radius: 7px;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* CORTE */
+  .corte-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+
+  .corte-card {
+    background: var(--red-bg);
+    border: 1px solid var(--red-border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+
+  .corte-metric {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .corte-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;
+    color: var(--red);
+    font-weight: 500;
+    margin-bottom: 6px;
+    line-height: 1;
+  }
+
+  .corte-action {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* CICLO TIMELINE */
+  .ciclo-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+
+  .ciclo-flow::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 24px;
+    bottom: 24px;
+    width: 1px;
+    background: var(--border-md);
+  }
+
+  .ciclo-step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 16px 0;
+    position: relative;
+  }
+
+  .ciclo-icon {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--border-md);
+    background: var(--dark2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .ciclo-content { flex: 1; padding-top: 6px; }
+
+  .ciclo-day {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--orange);
+    letter-spacing: 0.1em;
+    margin-bottom: 3px;
+  }
+
+  .ciclo-action {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+
+  .ciclo-detail {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* BUDGET TABLE */
+  .budget-wrap {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .budget-row {
+    display: grid;
+    grid-template-columns: 1fr 120px 120px 140px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .budget-row:last-child { border-bottom: none; }
+
+  .budget-row.header { background: var(--dark3); }
+
+  .budget-cell {
+    padding: 12px 18px;
+    font-size: 13px;
+    border-right: 1px solid var(--border);
+  }
+
+  .budget-cell:last-child { border-right: none; }
+
+  .budget-row.header .budget-cell {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+
+  .budget-row:not(.header) .budget-cell:first-child {
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .budget-row:not(.header) .budget-cell {
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+  }
+
+  .budget-row:not(.header) .budget-cell:first-child {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+  }
+
+  .budget-row.total { background: var(--orange-light); border-top: 1px solid var(--orange-border); }
+
+  .budget-row.total .budget-cell {
+    color: var(--orange);
+    font-weight: 600;
+  }
+
+  /* DECISION FLOW */
+  .decision-flow {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  .decision-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .decision-row:last-child { border-bottom: none; }
+
+  .decision-stage {
+    width: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    flex-shrink: 0;
+  }
+
+  .decision-arrow { color: var(--orange); font-size: 14px; flex-shrink: 0; }
+
+  .decision-condition {
+    flex: 1;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .decision-condition strong { color: var(--text); }
+
+  .decision-outcome {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* SCORING */
+  .scoring-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+  .scoring-mini {
+    border-radius: 9px;
+    padding: 14px 16px;
+    border: 1px solid;
+  }
+
+  .scoring-letter {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .scoring-desc {
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  /* TAG */
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--dark4); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-name">DESCOMPLIQUEI</div>
+    <div class="brand-sub">Ciclos de Criativos</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Estrutura</div>
+    <a class="nav-link active" href="#visao"><span class="nav-dot"></span>Visão Geral</a>
+    <a class="nav-link" href="#etapas"><span class="nav-dot"></span>As 3 Etapas</a>
+    <a class="nav-link" href="#ciclos"><span class="nav-dot"></span>Ciclos de Teste</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Métricas</div>
+    <a class="nav-link" href="#funil"><span class="nav-dot"></span>Funil & Métricas</a>
+    <a class="nav-link" href="#corte"><span class="nav-dot"></span>Gatilhos de Corte</a>
+    <a class="nav-link" href="#criterios"><span class="nav-dot"></span>Critérios de Passagem</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Operação</div>
+    <a class="nav-link" href="#fluxo"><span class="nav-dot"></span>Fluxo de Decisão</a>
+    <a class="nav-link" href="#budget"><span class="nav-dot"></span>Investimento</a>
+    <a class="nav-link" href="#scoring"><span class="nav-dot"></span>Lead Scoring</a>
+  </div>
+</nav>
+
+<main class="main">
+
+  <div class="hero">
+    <div class="hero-eyebrow">Descompliquei Marketing</div>
+    <h1>CICLOS DE TESTE<br><span>DE CRIATIVOS</span></h1>
+    <p class="hero-desc">Estrutura completa para testar, validar e escalar criativos no Meta Ads com método — do primeiro ciclo de 2 dias até a escala com orçamento aumentado.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="stat-val">3</div>
+        <div class="stat-label">Etapas</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-val">2 dias</div>
+        <div class="stat-label">Por ciclo de teste</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-val">R$60</div>
+        <div class="stat-label">Por criativo/teste</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-val">R$150</div>
+        <div class="stat-label">Por criativo/pré-escala</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-val">1 ciclo</div>
+        <div class="stat-label">De cada vez</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- VISÃO GERAL -->
+    <section class="section" id="visao">
+      <div class="sec-header">
+        <span class="sec-num">01</span>
+        <span class="sec-title">VISÃO GERAL DO PROCESSO</span>
+      </div>
+
+      <div class="pipeline" style="margin-bottom:8px">
+        <div class="pipe-step" style="background:rgba(232,98,10,0.05);border-color:var(--orange-border)">
+          <div class="pipe-step-name" style="color:var(--orange)">Teste</div>
+          <div class="pipe-step-metric">2 dias · R$60/criativo</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-step-name">Pré-Escala</div>
+          <div class="pipe-step-metric">5 dias · R$150/criativo</div>
+        </div>
+        <div class="pipe-step" style="background:rgba(34,197,94,0.04);border-color:var(--green-border)">
+          <div class="pipe-step-name" style="color:var(--green)">Escala</div>
+          <div class="pipe-step-metric">Orçamento aumentado</div>
+        </div>
+      </div>
+
+      <p style="font-size:12px;color:var(--text-dim);margin-bottom:32px">Sempre um ciclo ativo de cada vez. Os ciclos rodam em sequência — Ciclo 1, Ciclo 2, Ciclo 3... — cada um com 3 criativos novos.</p>
+
+      <!-- STAGES -->
+      <div class="stages">
+        <!-- TESTE -->
+        <div class="stage-card" style="background:var(--dark2)">
+          <div class="stage-head" style="background:rgba(232,98,10,0.05)">
+            <div>
+              <div class="stage-num">Etapa 01</div>
+              <div class="stage-name" style="color:var(--orange)">TESTE</div>
+            </div>
+            <div class="tag" style="background:var(--orange-light);color:var(--orange)">2 dias</div>
+          </div>
+          <div class="stage-body">
+            <div class="stage-row">
+              <div class="stage-row-label">Objetivo</div>
+              <div class="stage-row-val">Identificar se o criativo tem potencial mínimo de performance antes de investir mais.</div>
+            </div>
+            <div class="stage-row">
+              <div class="stage-row-label">Investimento</div>
+              <div class="stage-row-val"><strong>R$30/dia × 2 dias = R$60 por criativo</strong><br>3 criativos = R$180 por ciclo</div>
+            </div>
+            <div class="stage-row">
+              <div class="stage-row-label">Análise</div>
+              <div class="stage-row-val">Na noite do <strong>Dia 2</strong> — avaliar CPL, volume de leads e scoring dos leads gerados.</div>
+            </div>
+            <div class="stage-row">
+              <div class="stage-row-label">Decisão</div>
+              <div class="stage-row-val">Passa para Pré-Escala, Pausa ou Descarte.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRÉ-ESCALA -->
+        <div class="stage-card">
+          <div class="stage-head">
+            <div>
+              <div class="stage-num">Etapa 02</div>
+              <div class="stage-name">PRÉ-ESCALA</div>
+            </div>
+            <div class="tag" style="background:var(--blue-bg);color:var(--blue)">5 dias</div>
+          </div>
+          <div class="stage-body">
+            <div class="stage-row">
+              <div class="stage-row-label">Objetivo</div>
+              <div class="stage-row-val">Validar o criativo com volume maior. Confirmar CPMQL, qualidade dos MQLs e início de reuniões.</div>
+            </div>
+            <div class="stage-row">
+              <div class="stage-row-label">Investimento</div>
+              <div class="stage-row-val"><strong>R$30/dia × 5 dias = R$150 por criativo</strong><br>Somente criativos aprovados no Teste.</div>
+            </div>
+            <div class="stage-row">
+              <div class="stage-row-label">Análise</div>
+              <div class="stage-row-val">Na noite do <strong>Dia 5</strong> — avaliar CPMQL, reuniões geradas e scoring dos MQLs.</div>
+            </div>
+            <div class="stage-row">
+              <div class="stage-row-label">Decisão</div>
+              <div class="stage-row-val">Passa para Escala, Pausa ou Descarte.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESCALA -->
+        <div class="stage-card" style="background:var(--dark2)">
+          <div class="stage-head" style="background:var(--green-bg)">
+            <div>
+              <div class="stage-num">Etapa 03</div>
+              <div class="stage-name" style="color:var(--green)">ESCALA</div>
+            </div>
+            <div class="tag" style="background:var(--green-bg);color:var(--green)">Contínuo</div>
+          </div>
+          <div class="stage-body">
+            <div class="stage-row">
+              <div class="stage-row-label">Objetivo</div>
+              <div class="stage-row-val">Aumentar orçamento nos criativos validados para multiplicar os resultados.</div>
+            </div>
+            <div class="stage-row">
+              <div class="stage-row-label">Investimento</div>
+              <div class="stage-row-val"><strong>Orçamento escalado progressivamente.</strong><br>Aumentar gradualmente — não duplicar de uma vez.</div>
+            </div>
+            <div class="stage-row">
+              <div class="stage-row-label">Monitoramento</div>
+              <div class="stage-row-val">CPMQL, CPR, CPA, ROAS, reuniões e fechamentos. Acompanhamento diário.</div>
+            </div>
+            <div class="stage-row">
+              <div class="stage-row-label">ROAS mínimo</div>
+              <div class="stage-row-val"><strong>5x</strong> — para cada R$1 investido, R$5 em receita fechada.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CICLOS -->
+    <section class="section" id="ciclos">
+      <div class="sec-header">
+        <span class="sec-num">02</span>
+        <span class="sec-title">CICLOS DE TESTE</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px">
+        <div style="background:var(--dark2);border:1px solid var(--border);border-radius:10px;padding:16px 18px">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--orange);margin-bottom:6px;letter-spacing:0.1em">CICLO 1</div>
+          <div style="font-size:12px;color:var(--text-muted);line-height:1.65">
+            <strong style="color:var(--text)">Início:</strong> Dia 1 às 5h00<br>
+            <strong style="color:var(--text)">Roda:</strong> Dia 1 inteiro + Dia 2 inteiro<br>
+            <strong style="color:var(--text)">Análise:</strong> Dia 2 de noite<br>
+            <strong style="color:var(--text)">Investimento:</strong> R$180 (3 criativos)
+          </div>
+        </div>
+        <div style="background:var(--dark2);border:1px solid var(--border);border-radius:10px;padding:16px 18px">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--orange);margin-bottom:6px;letter-spacing:0.1em">CICLO 2</div>
+          <div style="font-size:12px;color:var(--text-muted);line-height:1.65">
+            <strong style="color:var(--text)">Início:</strong> Dia 3 às 5h00<br>
+            <strong style="color:var(--text)">Roda:</strong> Dia 3 inteiro + Dia 4 inteiro<br>
+            <strong style="color:var(--text)">Análise:</strong> Dia 4 de noite<br>
+            <strong style="color:var(--text)">Investimento:</strong> R$180 (3 criativos)
+          </div>
+        </div>
+        <div style="background:var(--dark2);border:1px solid var(--border);border-radius:10px;padding:16px 18px">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--orange);margin-bottom:6px;letter-spacing:0.1em">CICLO 3</div>
+          <div style="font-size:12px;color:var(--text-muted);line-height:1.65">
+            <strong style="color:var(--text)">Início:</strong> Dia 5 às 5h00<br>
+            <strong style="color:var(--text)">Roda:</strong> Dia 5 inteiro + Dia 6 inteiro<br>
+            <strong style="color:var(--text)">Análise:</strong> Dia 6 de noite<br>
+            <strong style="color:var(--text)">Investimento:</strong> R$180 (3 criativos)
+          </div>
+        </div>
+        <div style="background:var(--dark2);border:1px solid var(--border);border-radius:10px;padding:16px 18px">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--orange);margin-bottom:6px;letter-spacing:0.1em">CICLO 4</div>
+          <div style="font-size:12px;color:var(--text-muted);line-height:1.65">
+            <strong style="color:var(--text)">Início:</strong> Dia 7 às 5h00<br>
+            <strong style="color:var(--text)">Roda:</strong> Dia 7 inteiro + Dia 8 inteiro<br>
+            <strong style="color:var(--text)">Análise:</strong> Dia 8 de noite<br>
+            <strong style="color:var(--text)">Investimento:</strong> R$180 (3 criativos)
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--dark2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:12.5px;color:var(--text-muted)">
+        <strong style="color:var(--text)">Padrão dos ciclos:</strong> cada ciclo começa no Dia 1 do período às 5h00, roda 2 dias completos e a análise acontece na noite do segundo dia. Os 4 ciclos se sucedem de 2 em 2 dias — totalizando 8 dias de teste para validar a operação.
+      </div>
+    </section>
+
+    <!-- FUNIL & MÉTRICAS -->
+    <section class="section" id="funil">
+      <div class="sec-header">
+        <span class="sec-num">03</span>
+        <span class="sec-title">FUNIL E MÉTRICAS</span>
+      </div>
+
+      <div class="pipeline" style="margin-bottom:24px">
+        <div class="pipe-step">
+          <div class="pipe-step-name">Criativo</div>
+          <div class="pipe-step-metric">CTR link</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-step-name">Lead</div>
+          <div class="pipe-step-metric">CPL</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-step-name">Lead Qualificado</div>
+          <div class="pipe-step-metric">CPMQL</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-step-name">Reunião Agendada</div>
+          <div class="pipe-step-metric">CPR</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-step-name">Venda</div>
+          <div class="pipe-step-metric">CPA</div>
+        </div>
+      </div>
+
+      <div class="metrics-wrap">
+        <div class="metrics-head">
+          <div class="metrics-head-cell">Métrica</div>
+          <div class="metrics-head-cell razoavel">⚠ Razoável</div>
+          <div class="metrics-head-cell bom">● Muito bom</div>
+          <div class="metrics-head-cell escalavel">↑ Escalável</div>
+        </div>
+        <div class="metrics-row">
+          <div class="metrics-cell metric-name">CPL<span class="metrics-cell metric-sub">custo por lead</span></div>
+          <div class="metrics-cell razoavel">R$50 – R$80<span class="metric-action">monitorar qualidade</span></div>
+          <div class="metrics-cell bom">R$25 – R$50<span class="metric-action">saudável</span></div>
+          <div class="metrics-cell escalavel">abaixo de R$25<span class="metric-action">ampliar qualidade</span></div>
+        </div>
+        <div class="metrics-row">
+          <div class="metrics-cell metric-name">CPMQL<span class="metrics-cell metric-sub">custo por lead qualificado</span></div>
+          <div class="metrics-cell razoavel">R$150 – R$250<span class="metric-action">aceitável</span></div>
+          <div class="metrics-cell bom">R$80 – R$150<span class="metric-action">muito bom</span></div>
+          <div class="metrics-cell escalavel">abaixo de R$80<span class="metric-action">escalar com segurança</span></div>
+        </div>
+        <div class="metrics-row">
+          <div class="metrics-cell metric-name">CPR<span class="metrics-cell metric-sub">custo por reunião</span></div>
+          <div class="metrics-cell razoavel">R$300 – R$500<span class="metric-action">pause</span></div>
+          <div class="metrics-cell bom">R$150 – R$300<span class="metric-action">bom retorno</span></div>
+          <div class="metrics-cell escalavel">abaixo de R$150<span class="metric-action">máquina de reuniões</span></div>
+        </div>
+        <div class="metrics-row">
+          <div class="metrics-cell metric-name">CPA<span class="metrics-cell metric-sub">custo por venda</span></div>
+          <div class="metrics-cell razoavel">R$1.500 – R$3.000<span class="metric-action">margem apertada</span></div>
+          <div class="metrics-cell bom">R$800 – R$1.500<span class="metric-action">saudável</span></div>
+          <div class="metrics-cell escalavel">abaixo de R$800<span class="metric-action">escalar ao máximo</span></div>
+        </div>
+        <div class="metrics-row">
+          <div class="metrics-cell metric-name">ROAS<span class="metrics-cell metric-sub">retorno sobre investimento</span></div>
+          <div class="metrics-cell razoavel">2x – 5x<span class="metric-action">monitorar</span></div>
+          <div class="metrics-cell bom">5x – 10x<span class="metric-action">saudável</span></div>
+          <div class="metrics-cell escalavel">acima de 10x<span class="metric-action">escalar agressivamente</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;padding:12px 16px;background:var(--dark2);border:1px solid var(--border);border-radius:8px;font-size:12.5px;color:var(--text-muted)">
+        <strong style="color:var(--text)">Sobre o CTR link:</strong> não é usado como critério de decisão primário na Descompliquei. Serve apenas como sinal secundário de qualidade do gancho — não elimina nem aprova criativos isoladamente.
+      </div>
+    </section>
+
+    <!-- GATILHOS DE CORTE -->
+    <section class="section" id="corte">
+      <div class="sec-header">
+        <span class="sec-num">04</span>
+        <span class="sec-title">GATILHOS DE CORTE — PAUSE IMEDIATO</span>
+      </div>
+
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px">Se qualquer um dos critérios abaixo for atingido durante o ciclo, o criativo ou conjunto é pausado imediatamente — sem esperar a análise da noite.</p>
+
+      <div class="corte-grid">
+        <div class="corte-card">
+          <div class="corte-metric">CPL</div>
+          <div class="corte-val">acima de R$60</div>
+          <div class="corte-action">→ pausa o conjunto de anúncios</div>
+        </div>
+        <div class="corte-card">
+          <div class="corte-metric">Volume de leads</div>
+          <div class="corte-val">menos de 3 em 2 dias</div>
+          <div class="corte-action">→ revisar segmentação ou criativo</div>
+        </div>
+        <div class="corte-card">
+          <div class="corte-metric">CPMQL</div>
+          <div class="corte-val">acima de R$500</div>
+          <div class="corte-action">→ revisar qualificação e ângulo</div>
+        </div>
+        <div class="corte-card">
+          <div class="corte-metric">Frequência</div>
+          <div class="corte-val">acima de 3 sem conversão</div>
+          <div class="corte-action">→ público esgotado, trocar criativo</div>
+        </div>
+        <div class="corte-card">
+          <div class="corte-metric">Scoring dos leads</div>
+          <div class="corte-val">100% C e D</div>
+          <div class="corte-action">→ revisar ângulo de comunicação</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CRITÉRIOS DE PASSAGEM -->
+    <section class="section" id="criterios">
+      <div class="sec-header">
+        <span class="sec-num">05</span>
+        <span class="sec-title">CRITÉRIOS DE PASSAGEM</span>
+      </div>
+
+      <div class="criteria-grid">
+
+        <!-- TESTE → PRÉ-ESCALA -->
+        <div class="criteria-card">
+          <div class="criteria-card-head">
+            <div class="badge" style="background:var(--orange-light)">→</div>
+            <div>
+              <div class="title">Teste → Pré-Escala</div>
+              <div class="sub">Avaliação na noite do Dia 2</div>
+            </div>
+          </div>
+          <div class="criteria-card-body">
+            <div class="criteria-item">
+              <div class="criteria-dot" style="background:var(--green)"></div>
+              <div><strong>CPL abaixo de R$60</strong> — custo por lead dentro do limite com apenas R$60 investidos</div>
+            </div>
+            <div class="criteria-item">
+              <div class="criteria-dot" style="background:var(--green)"></div>
+              <div><strong>Mínimo 1 lead scoring A ou B</strong> — prova de que o criativo está atraindo o ICP certo</div>
+            </div>
+            <div class="criteria-item">
+              <div class="criteria-dot" style="background:var(--green)"></div>
+              <div><strong>Pelo menos 1 lead gerado</strong> — volume mínimo necessário para avaliar</div>
+            </div>
+            <div class="criteria-note">
+              ⚠️ O CPMQL no teste é <strong>indicativo, não eliminatório</strong> — o volume de R$60 é insuficiente para dados conclusivos. Usar como sinal, não como critério de corte.
+            </div>
+          </div>
+        </div>
+
+        <!-- PRÉ-ESCALA → ESCALA -->
+        <div class="criteria-card">
+          <div class="criteria-card-head">
+            <div class="badge" style="background:var(--green-bg)">↑</div>
+            <div>
+              <div class="title">Pré-Escala → Escala</div>
+              <div class="sub">Avaliação na noite do Dia 5</div>
+            </div>
+          </div>
+          <div class="criteria-card-body">
+            <div class="criteria-item">
+              <div class="criteria-dot" style="background:var(--green)"></div>
+              <div><strong>CPMQL abaixo de R$150</strong> — custo por lead qualificado validado com volume real</div>
+            </div>
+            <div class="criteria-item">
+              <div class="criteria-dot" style="background:var(--green)"></div>
+              <div><strong>Mínimo 2 reuniões geradas</strong> — prova de que o funil completo está funcionando</div>
+            </div>
+            <div class="criteria-item">
+              <div class="criteria-dot" style="background:var(--green)"></div>
+              <div><strong>Scoring A+B acima de 50% dos MQLs</strong> — qualidade dos leads validada</div>
+            </div>
+            <div class="criteria-note">
+              ✅ Se tiver <strong>1 venda fechada com CPA abaixo de R$1.500</strong> — escala com segurança total, mesmo sem os 3 critérios verdes.
+            </div>
+          </div>
+        </div>
+
+        <!-- ESCALA: MANUTENÇÃO -->
+        <div class="criteria-card">
+          <div class="criteria-card-head">
+            <div class="badge" style="background:var(--green-bg)">✓</div>
+            <div>
+              <div class="title">Manutenção na Escala</div>
+              <div class="sub">Monitoramento diário</div>
+            </div>
+          </div>
+          <div class="criteria-card-body">
+            <div class="criteria-item">
+              <div class="criteria-dot" style="background:var(--blue)"></div>
+              <div><strong>ROAS mínimo 5x</strong> — para cada R$1 investido, R$5 em receita fechada</div>
+            </div>
+            <div class="criteria-item">
+              <div class="criteria-dot" style="background:var(--blue)"></div>
+              <div><strong>CPR abaixo de R$300</strong> — reuniões chegando a custo saudável</div>
+            </div>
+            <div class="criteria-item">
+              <div class="criteria-dot" style="background:var(--blue)"></div>
+              <div><strong>CPA abaixo de R$1.500</strong> — custo por venda dentro da margem</div>
+            </div>
+            <div class="criteria-note">
+              📈 Aumentar orçamento de forma gradual — nunca duplicar de uma vez. Incrementos de 20–30% a cada 3–4 dias de estabilidade.
+            </div>
+          </div>
+        </div>
+
+        <!-- DESCARTE -->
+        <div class="criteria-card" style="border-color:var(--red-border)">
+          <div class="criteria-card-head" style="background:var(--red-bg)">
+            <div class="badge" style="background:var(--red-bg)">✗</div>
+            <div>
+              <div class="title" style="color:var(--red)">Descarte / Pausa</div>
+              <div class="sub">Quando o criativo não passa</div>
+            </div>
+          </div>
+          <div class="criteria-card-body">
+            <div class="criteria-item">
+              <div class="criteria-dot" style="background:var(--red)"></div>
+              <div><strong>Zero leads em 2 dias</strong> — pausa imediata, sem esperar a análise</div>
+            </div>
+            <div class="criteria-item">
+              <div class="criteria-dot" style="background:var(--red)"></div>
+              <div><strong>CPL acima de R$60</strong> — inviável com o volume de investimento do teste</div>
+            </div>
+            <div class="criteria-item">
+              <div class="criteria-dot" style="background:var(--red)"></div>
+              <div><strong>Todos os leads scoring C ou D</strong> — criativo está atraindo o público errado</div>
+            </div>
+            <div class="criteria-note">
+              🔁 Criativo descartado não volta. Registrar o aprendizado e criar nova versão com ângulo diferente no próximo ciclo.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FLUXO DE DECISÃO -->
+    <section class="section" id="fluxo">
+      <div class="sec-header">
+        <span class="sec-num">06</span>
+        <span class="sec-title">FLUXO DE DECISÃO</span>
+      </div>
+
+      <div class="decision-flow">
+        <div class="decision-row">
+          <div class="decision-stage">Noite do Dia 2</div>
+          <div class="decision-arrow">›</div>
+          <div class="decision-condition">CPL abaixo de R$60 <strong>E</strong> pelo menos 1 lead scoring A ou B</div>
+          <div class="decision-outcome" style="background:var(--green-bg);color:var(--green)">→ Pré-Escala</div>
+        </div>
+        <div class="decision-row">
+          <div class="decision-stage">Noite do Dia 2</div>
+          <div class="decision-arrow">›</div>
+          <div class="decision-condition">CPL entre R$60–R$80 <strong>MAS</strong> scoring A ou B presente — potencial existe</div>
+          <div class="decision-outcome" style="background:var(--yellow-bg);color:var(--yellow)">→ Avaliar</div>
+        </div>
+        <div class="decision-row">
+          <div class="decision-stage">Noite do Dia 2</div>
+          <div class="decision-arrow">›</div>
+          <div class="decision-condition">Zero leads <strong>OU</strong> CPL acima de R$60 <strong>OU</strong> todos os leads C e D</div>
+          <div class="decision-outcome" style="background:var(--red-bg);color:var(--red)">→ Descartar</div>
+        </div>
+        <div class="decision-row">
+          <div class="decision-stage">Noite do Dia 5</div>
+          <div class="decision-arrow">›</div>
+          <div class="decision-condition">CPMQL abaixo de R$150 <strong>E</strong> 2+ reuniões <strong>E</strong> scoring A+B acima de 50%</div>
+          <div class="decision-outcome" style="background:var(--green-bg);color:var(--green)">→ Escala</div>
+        </div>
+        <div class="decision-row">
+          <div class="decision-stage">Noite do Dia 5</div>
+          <div class="decision-arrow">›</div>
+          <div class="decision-condition">1 venda fechada com CPA abaixo de R$1.500 — independente das outras métricas</div>
+          <div class="decision-outcome" style="background:var(--green-bg);color:var(--green)">→ Escala Total</div>
+        </div>
+        <div class="decision-row">
+          <div class="decision-stage">Noite do Dia 5</div>
+          <div class="decision-arrow">›</div>
+          <div class="decision-condition">Não atingiu os critérios — CPMQL alto, sem reuniões ou scoring ruim</div>
+          <div class="decision-outcome" style="background:var(--red-bg);color:var(--red)">→ Descartar</div>
+        </div>
+        <div class="decision-row">
+          <div class="decision-stage">Escala</div>
+          <div class="decision-arrow">›</div>
+          <div class="decision-condition">ROAS abaixo de 5x por 3 dias consecutivos <strong>OU</strong> CPA acima de R$3.000</div>
+          <div class="decision-outcome" style="background:var(--red-bg);color:var(--red)">→ Pausar</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INVESTIMENTO -->
+    <section class="section" id="budget">
+      <div class="sec-header">
+        <span class="sec-num">07</span>
+        <span class="sec-title">INVESTIMENTO POR CICLO</span>
+      </div>
+
+      <div class="budget-wrap">
+        <div class="budget-row header">
+          <div class="budget-cell">Cenário</div>
+          <div class="budget-cell">Criativos</div>
+          <div class="budget-cell">Etapa</div>
+          <div class="budget-cell">Investimento</div>
+        </div>
+        <div class="budget-row">
+          <div class="budget-cell">Fase de Teste (sempre)</div>
+          <div class="budget-cell">3</div>
+          <div class="budget-cell">Teste (2 dias)</div>
+          <div class="budget-cell">R$180</div>
+        </div>
+        <div class="budget-row">
+          <div class="budget-cell">Todos passam no teste</div>
+          <div class="budget-cell">3</div>
+          <div class="budget-cell">Pré-Escala (5 dias)</div>
+          <div class="budget-cell">R$450</div>
+        </div>
+        <div class="budget-row">
+          <div class="budget-cell">2 passam no teste</div>
+          <div class="budget-cell">2</div>
+          <div class="budget-cell">Pré-Escala (5 dias)</div>
+          <div class="budget-cell">R$300</div>
+        </div>
+        <div class="budget-row">
+          <div class="budget-cell">1 passa no teste</div>
+          <div class="budget-cell">1</div>
+          <div class="budget-cell">Pré-Escala (5 dias)</div>
+          <div class="budget-cell">R$150</div>
+        </div>
+        <div class="budget-row">
+          <div class="budget-cell">Nenhum passa no teste</div>
+          <div class="budget-cell">0</div>
+          <div class="budget-cell">Pré-Escala não roda</div>
+          <div class="budget-cell">R$0</div>
+        </div>
+        <div class="budget-row total">
+          <div class="budget-cell">Ciclo completo (melhor caso)</div>
+          <div class="budget-cell">3 + 3</div>
+          <div class="budget-cell">Teste + Pré-Escala</div>
+          <div class="budget-cell">R$630</div>
+        </div>
+        <div class="budget-row total">
+          <div class="budget-cell">Ciclo completo (pior caso)</div>
+          <div class="budget-cell">3 + 0</div>
+          <div class="budget-cell">Só Teste</div>
+          <div class="budget-cell">R$180</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEAD SCORING -->
+    <section class="section" id="scoring">
+      <div class="sec-header">
+        <span class="sec-num">08</span>
+        <span class="sec-title">LEAD SCORING NA ANÁLISE</span>
+      </div>
+
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px">O scoring dos leads gerados é um critério tão importante quanto o CPL. Um criativo pode ter CPL baixo mas atrair os leads errados — e um criativo com CPL um pouco mais alto mas com leads scoring A vale mais.</p>
+
+      <div class="scoring-grid">
+        <div class="scoring-mini" style="background:rgba(34,197,94,0.06);border-color:rgba(34,197,94,0.2)">
+          <div class="scoring-letter" style="color:var(--green)">A</div>
+          <div class="scoring-desc" style="color:#4ADE80">Lead dos sonhos — estética, 60K+/mês, 4+ pessoas, 3+ anos. <strong>1 lead A já valida o teste.</strong></div>
+        </div>
+        <div class="scoring-mini" style="background:var(--blue-bg);border-color:var(--blue-border)">
+          <div class="scoring-letter" style="color:var(--blue)">B</div>
+          <div class="scoring-desc" style="color:#93C5FD">Qualificado com ressalva — estética, 30–60K, equipe menor. <strong>Válido para passagem no teste.</strong></div>
+        </div>
+        <div class="scoring-mini" style="background:var(--yellow-bg);border-color:var(--yellow-border)">
+          <div class="scoring-letter" style="color:var(--yellow)">C</div>
+          <div class="scoring-desc" style="color:#FCD34D">Em desenvolvimento — estética, abaixo de 30K, solo. <strong>Não conta como critério de passagem.</strong></div>
+        </div>
+        <div class="scoring-mini" style="background:var(--red-bg);border-color:var(--red-border)">
+          <div class="scoring-letter" style="color:var(--red)">D</div>
+          <div class="scoring-desc" style="color:#FCA5A5">Fora do ICP — sem estética ou começando. <strong>Criativo comunicando errado — revisar ângulo.</strong></div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;background:var(--dark2);border:1px solid var(--border);border-radius:10px;padding:16px 20px">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-dim);margin-bottom:10px;font-weight:600">Como usar o scoring na análise</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:13px;color:var(--text-muted);display:flex;gap:10px"><span style="color:var(--orange);flex-shrink:0">›</span>Maioria dos leads A e B → criativo está no ângulo certo, seguir</div>
+          <div style="font-size:13px;color:var(--text-muted);display:flex;gap:10px"><span style="color:var(--orange);flex-shrink:0">›</span>Maioria C → criativo atrai curiosos, não ICP. Rever headline e copy</div>
+          <div style="font-size:13px;color:var(--text-muted);display:flex;gap:10px"><span style="color:var(--orange);flex-shrink:0">›</span>Maioria D → criativo está comunicando para público completamente errado. Descartar e mudar ângulo</div>
+          <div style="font-size:13px;color:var(--text-muted);display:flex;gap:10px"><span style="color:var(--orange);flex-shrink:0">›</span>CPL alto mas scoring A → discutir caso a caso — pode valer a pena na Pré-Escala</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script>
+  const sections = document.querySelectorAll('.section');
+  const links = document.querySelectorAll('.nav-link');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const link = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
